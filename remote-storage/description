@@ -1,0 +1,16 @@
+As my TrueNas is virtualized inside of xcp-ng and for some VM and install isos shares I'm using shares from this nas, standart autostart is not working on VMs using these remote storages as they won't autorecennect after server reboot.
+to overcome this issue I created script and calling it from /etc/rc.local
+
+To find remote storage that needs to be reconnected, run:
+xe pbd-list
+
+in the output we can see not connected storage, note the uuid.
+
+in the script for every remote that needs to be reconnected add line:
+xe pbd-plug uuid=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+then add for every VM dependant on reote storage following line (you can use xe vm-list to find-out the VM's uuid)
+xe vm-start uuid=yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
+
+add correct permisions:
+chmod +x script
